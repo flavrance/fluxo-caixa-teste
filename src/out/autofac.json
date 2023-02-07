@@ -1,0 +1,18 @@
+﻿{
+  "defaultAssembly": "FluxoCaixa.Infrastructure",
+  "modules": [
+    {
+      "type": "FluxoCaixa.Infrastructure.Modules.WebApiModule",
+      "properties": {
+      }
+    },
+    {
+      "type": "FluxoCaixa.Infrastructure.Modules.ApplicationModule",
+      "properties": {
+      }
+    },
+    {
+      "type": "FluxoCaixa.Infrastructure.InMemoryDataAccess.Module"
+    }
+  ]
+}

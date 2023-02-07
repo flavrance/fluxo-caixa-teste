@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FluxoCaixa.WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:FluxoCaixa.WebApi.UseCases.Credit.CashFlowsController.Credit(FluxoCaixa.WebApi.UseCases.Credit.CreditRequest)">
+            <summary>
+            Credit from an cash flow
+            </summary>
+        </member>
+        <member name="M:FluxoCaixa.WebApi.UseCases.Debit.CashFlowsController.Debit(FluxoCaixa.WebApi.UseCases.Debit.DebitRequest)">
+            <summary>
+            Debit from an cash flow
+            </summary>
+        </member>
+        <member name="M:FluxoCaixa.WebApi.UseCases.GetCashFlowDetails.CashFlowsController.Get(System.Guid)">
+            <summary>
+            Get an cash flow balance
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,22 @@
+﻿{
+  "defaultAssembly": "FluxoCaixa.Infrastructure",
+  "modules": [
+    {
+      "type": "FluxoCaixa.Infrastructure.Modules.WebApiModule",
+      "properties": {
+      }
+    },
+    {
+      "type": "FluxoCaixa.Infrastructure.Modules.ApplicationModule",
+      "properties": {
+      }
+    },
+    {
+      "type": "FluxoCaixa.Infrastructure.MongoDataAccess.Module",
+      "properties": {
+        "ConnectionString": "mongodb://10.0.75.1:27017",
+        "DatabaseName": "FluxoCaixa-V01"
+      }
+    }
+  ]
+}
