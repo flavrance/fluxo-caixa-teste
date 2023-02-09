@@ -14,10 +14,10 @@
             this.cashFlowWriteOnlyRepository = cashFlowWriteOnlyRepository;
         }
 
-        public async Task<RegisterResult> Execute(double initialAmount){
+        public async Task<RegisterResult> Execute(int year, double initialAmount){
             
 
-            CashFlow cashFlow = new CashFlow();
+            CashFlow cashFlow = new CashFlow(year);
             cashFlow.Credit(initialAmount);
             Credit credit = (Credit)cashFlow.GetLastEntry();            
 

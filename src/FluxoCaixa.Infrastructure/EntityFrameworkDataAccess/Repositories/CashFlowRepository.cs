@@ -20,9 +20,10 @@
 
         public async Task Add(CashFlow cashFlow, Credit credit)
         {
-            Entities.CashFlow accountEntity = new Entities.CashFlow()
+            Entities.CashFlow cashFlowEntity = new Entities.CashFlow()
             {                
-                Id = cashFlow.Id
+                Id = cashFlow.Id,
+                Year = cashFlow.Year             
             };
 
             Entities.Credit creditEntity = new Entities.Credit()
@@ -33,7 +34,7 @@
                 EntryDate = credit.EntryDate
             };
 
-            await _context.CashFlows.AddAsync(accountEntity);
+            await _context.CashFlows.AddAsync(cashFlowEntity);
             await _context.Credits.AddAsync(creditEntity);
             await _context.SaveChangesAsync();
         }
@@ -98,6 +99,7 @@
 
             CashFlow result = CashFlow.Load(
                 cashFlow.Id,                
+                cashFlow.Year,
                 entryCollection);
 
             return result;

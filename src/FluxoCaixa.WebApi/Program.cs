@@ -30,7 +30,7 @@
                         .MinimumLevel.Debug()
                         .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                         .Enrich.FromLogContext()
-                        .WriteTo.File(Path.Combine(hostingContext.HostingEnvironment.ContentRootPath, $"logs/log-{System.DateTime.UtcNow}.log")),
+                        .WriteTo.File(Path.Combine(hostingContext.HostingEnvironment.ContentRootPath, $"logs/log-{System.DateTime.UtcNow.ToString(format: "yyyyMMdd")}.log")),
                         preserveStaticLogger: false,
                         writeToProviders: true
                     )

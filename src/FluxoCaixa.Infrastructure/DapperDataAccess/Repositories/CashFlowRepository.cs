@@ -23,12 +23,13 @@
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
-                string insertAccountSQL = "INSERT INTO CashFlow (Id) VALUES (@Id)";
+                string insertCashFlowSQL = "INSERT INTO CashFlow (Id, Year) VALUES (@Id, @Year)";
 
                 DynamicParameters cashFlowParameters = new DynamicParameters();
-                cashFlowParameters.Add("@id", cashFlow.Id);                
+                cashFlowParameters.Add("@id", cashFlow.Id);
+                cashFlowParameters.Add("@year", cashFlow.Year);
 
-                int accountRows = await db.ExecuteAsync(insertAccountSQL, cashFlowParameters);
+                int cashFlowRows = await db.ExecuteAsync(insertCashFlowSQL, cashFlowParameters);
                 
                 string insertCreditSQL = "INSERT INTO [Credit] (Id, Amount, EntryDate, CashFlowId) " +
                     "VALUES (@Id, @Amount, @EntryDate, @CashFlowId)";
@@ -37,7 +38,7 @@
                 entryParameters.Add("@id", credit.Id);
                 entryParameters.Add("@amount", (double)credit.Amount);
                 entryParameters.Add("@transactionDate", credit.EntryDate);
-                entryParameters.Add("@accountId", credit.CashFlowId);
+                entryParameters.Add("@cashFlowId", credit.CashFlowId);
 
                 int creditRows = await db.ExecuteAsync(insertCreditSQL, entryParameters);
             }
@@ -71,6 +72,7 @@
                       WHERE CashFlowId = @Id";
 
                 List<IEntry> entriesList = new List<IEntry>();
+                List<IEntry> reportList = new List<IEntry>();
 
                 using (var reader = db.ExecuteReader(credits, new { id }))
                 {
@@ -98,6 +100,25 @@
                     }
                 }
 
+                string report =
+                   @"SELECT SUM(ISNULL(Credit.Amount,0) - ISNULL(Debit.Amount)) as Amount, '' as Description, ISNULL(Credit.EntryDate, Debit.EntryDate) as EntryDate 
+                        FROM CashFlow 
+                        LEFT JOIN Credit on CashFlow.Id = Credit.CashFlowId
+                        LEFT JOIN Debit on CashFlow.Id = Debit.CashFlowId
+                        WHERE CashFlow.Id = @cashFlowId
+                        GROUP BY '', ISNULL(Credit.EntryDate, Debit.EntryDate)";
+
+                using (var reader = db.ExecuteReader(report, new { id }))
+                {
+                    var parser = reader.GetRowParser<Report>();
+
+                    while (reader.Read())
+                    {
+                        IEntry entry = parser(reader);
+                        reportList.Add(entry);
+                    }
+                }
+
                 EntryCollection entryCollection = new EntryCollection();
 
                 foreach (var item in entriesList.OrderBy(e => e.EntryDate))
@@ -105,7 +126,14 @@
                     entryCollection.Add(item);
                 }
 
-                CashFlow result = CashFlow.Load(cashFlow.Id, entryCollection);
+                ReportCollection reportCollection = new ReportCollection();
+
+                foreach (var item in reportList.OrderBy(e => e.EntryDate))
+                {
+                    reportCollection.Add(item);
+                }
+
+                CashFlow result = CashFlow.Load(cashFlow.Id, cashFlow.Year, entryCollection, reportCollection);
                 return result;
             }
         }
@@ -121,7 +149,7 @@
                 entryParameters.Add("@id", credit.Id);
                 entryParameters.Add("@amount", (double)credit.Amount);
                 entryParameters.Add("@transactionDate", credit.EntryDate);
-                entryParameters.Add("@accountId", credit.CashFlowId);
+                entryParameters.Add("@cashFlowId", credit.CashFlowId);
 
                 int creditRows = await db.ExecuteAsync(insertCreditSQL, entryParameters);
             }
@@ -138,7 +166,7 @@
                 entryParameters.Add("@id", debit.Id);
                 entryParameters.Add("@amount", (double)debit.Amount);
                 entryParameters.Add("@transactionDate", debit.EntryDate);
-                entryParameters.Add("@accountId", debit.CashFlowId);
+                entryParameters.Add("@cashFlowId", debit.CashFlowId);
 
                 int debitRows = await db.ExecuteAsync(insertDebitSQL, entryParameters);
             }

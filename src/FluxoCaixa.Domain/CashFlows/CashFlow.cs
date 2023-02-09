@@ -8,7 +8,7 @@
     public sealed class CashFlow : IEntity, IAggregateRoot
     {
         public Guid Id { get; private set; }
-        
+        public int Year { get; private set; }
         public IReadOnlyCollection<IEntry> GetEntries()
         {
             IReadOnlyCollection<IEntry> readOnly = _entries.GetEntries();
@@ -16,10 +16,12 @@
         }
 
         private EntryCollection _entries;
-
-        public CashFlow()
+        private ReportCollection _report;
+        
+        public CashFlow(int year)
         {
             Id = Guid.NewGuid();
+            Year = year;
             _entries = new EntryCollection();            
         }
         public void Credit(Amount amount)
@@ -44,14 +46,29 @@
         {
             IEntry entry = _entries.GetLastEntry();
             return entry;
-        }        
+        }
 
-        public static CashFlow Load(Guid id, EntryCollection entries)
+        public IReadOnlyCollection<IEntry> GetEntriesByDate()
         {
-            CashFlow account = new CashFlow();
-            account.Id = id;            
-            account._entries = entries;
-            return account;
+            IReadOnlyCollection<IEntry> readOnly = _report.GetEntries();
+            return readOnly;
+        }
+
+        public static CashFlow Load(Guid id, int year, EntryCollection entries)
+        {
+            CashFlow cashFlow = new CashFlow(year);
+            cashFlow.Id = id;         
+            cashFlow._entries = entries;
+            return cashFlow;
+        }
+
+        public static CashFlow Load(Guid id, int year, EntryCollection entries, ReportCollection report)
+        {
+            CashFlow cashFlow = new CashFlow(year);
+            cashFlow.Id = id;
+            cashFlow._entries = entries;
+            cashFlow._report= report;
+            return cashFlow;
         }
     }
 }

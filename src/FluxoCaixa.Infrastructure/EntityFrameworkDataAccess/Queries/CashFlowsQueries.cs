@@ -20,7 +20,7 @@
 
         public async Task<CashFlowResult> GetCashFlow(Guid cashFlowId)
         {
-            Entities.CashFlow account = await _context
+            Entities.CashFlow cashFlow = await _context
                 .CashFlows
                 .FindAsync(cashFlowId);
 
@@ -64,7 +64,8 @@
             entryCollection.Add(orderedTransactions);
 
             CashFlow result = CashFlow.Load(
-                account.Id,                
+                cashFlow.Id,                
+                cashFlow.Year,
                 entryCollection);
 
             CashFlowResult re = new CashFlowResult(result);

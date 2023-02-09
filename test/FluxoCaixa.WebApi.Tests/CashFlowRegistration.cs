@@ -46,6 +46,7 @@ namespace FluxoCaixa.WebApi.Tests
             await Debit(customerId_accountId.Item2, 400);
             await Debit(customerId_accountId.Item2, 500);            
             */
+            
         }        
 
         private async Task GetCashFlow(string cashFlowId)

@@ -7,6 +7,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using FluxoCaixa.Application.Results;
 
     public class CashFlowRepository : ICashFlowReadOnlyRepository, ICashFlowWriteOnlyRepository
     {
@@ -21,7 +22,9 @@
         {
             Entities.CashFlow cashFlowEntity = new Entities.CashFlow()
             {                
-                Id = cashFlow.Id
+                Id = cashFlow.Id,
+                Year = cashFlow.Year
+
             };
 
             Entities.Credit creditEntity = new Entities.Credit()
@@ -46,7 +49,7 @@
 
         public async Task<CashFlow> Get(Guid id)
         {
-            Entities.CashFlow account = await _context
+            Entities.CashFlow cashFlow = await _context
                 .CashFlows
                 .Find(e => e.Id == id)
                 .SingleOrDefaultAsync();
@@ -62,6 +65,7 @@
                 .ToListAsync();
 
             List<IEntry> entries = new List<IEntry>();
+            List<IEntry> reports = new List<IEntry>();
 
             foreach (Entities.Credit entryData in credits)
             {
@@ -72,6 +76,7 @@
                     entryData.EntryDate);
 
                 entries.Add(entry);
+                reports.Add(entry);
             }
 
             foreach (Entities.Debit entryData in debits)
@@ -83,16 +88,29 @@
                     entryData.EntryDate);
 
                 entries.Add(entry);
+                Debit rerportEntry = Debit.Load(
+                    entryData.Id,
+                    entryData.CashFlowId,
+                    -entryData.Amount,
+                    entryData.EntryDate);
+                reports.Add(entry);
             }
 
             var orderedEntries = entries.OrderBy(o => o.EntryDate).ToList();
+            var reportEntries = reports.GroupBy(e => new { EntryDate = e.EntryDate }).Select(s => Report.Load(s.Sum(x => x.Amount), s.Key.EntryDate)).ToList();
 
             EntryCollection EntryCollection = new EntryCollection();
             EntryCollection.Add(orderedEntries);
 
+            ReportCollection ReportCollection = new ReportCollection();
+            ReportCollection.Add(reportEntries);
+
+
             CashFlow result = CashFlow.Load(
-                account.Id,
-                EntryCollection);
+                cashFlow.Id,
+                cashFlow.Year,
+                EntryCollection,
+                ReportCollection);
 
             return result;
         }

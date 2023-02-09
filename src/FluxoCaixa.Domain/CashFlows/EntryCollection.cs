@@ -1,8 +1,10 @@
 ﻿namespace FluxoCaixa.Domain.CashFlows
 {
     using FluxoCaixa.Domain.ValueObjects;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Linq;
 
     public sealed class EntryCollection
     {
@@ -52,6 +54,6 @@
             }
 
             return totalAmount;
-        }
+        }       
     }
 }

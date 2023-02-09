@@ -25,7 +25,7 @@ namespace FluxoCaixa.UseCases.Tests
         [InlineData("c725315a-1de6-4bf7-aecf-3af8f0083681", 100)]
         public async void Credit_Valid_Amount(string cashFlowId, double amount)
         {
-            var cashFlow = new CashFlow();
+            var cashFlow = new CashFlow(2023);
             
 
             cashFlowReadOnlyRepository

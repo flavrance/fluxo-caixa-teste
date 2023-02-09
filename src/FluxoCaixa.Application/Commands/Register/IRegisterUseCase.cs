@@ -4,6 +4,6 @@
 
     public interface IRegisterUseCase
     {
-        Task<RegisterResult> Execute(double initialAmount);
+        Task<RegisterResult> Execute(int year, double initialAmount);
     }
 }

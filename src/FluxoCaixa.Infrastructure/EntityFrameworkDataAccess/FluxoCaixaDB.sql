@@ -1,5 +1,6 @@
 CREATE TABLE [CashFlow](
 	[Id] [uniqueidentifier] NOT NULL,	
+	[Year] [int] NOT NULL,
 	[Version] [int] NOT NULL,
 PRIMARY KEY CLUSTERED 
 (

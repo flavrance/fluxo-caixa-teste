@@ -14,7 +14,7 @@ namespace FluxoCaixa.Domain.Tests
             // Arrange
             
             Amount amount = new Amount(100.0);
-            CashFlow sut = new CashFlow();
+            CashFlow sut = new CashFlow(2023);
 
             //
             // Act
@@ -34,7 +34,7 @@ namespace FluxoCaixa.Domain.Tests
         {
             //
             // Arrange
-            CashFlow sut = new CashFlow();
+            CashFlow sut = new CashFlow(2023);
             sut.Credit(1000.0);
 
             //
@@ -52,7 +52,7 @@ namespace FluxoCaixa.Domain.Tests
         {
             //
             // Arrange
-            CashFlow sut = new CashFlow();
+            CashFlow sut = new CashFlow(2023);
             sut.Credit(200);
             sut.Debit(100);
             sut.Credit(50);
@@ -77,6 +77,7 @@ namespace FluxoCaixa.Domain.Tests
             // Act
             CashFlow cashFlow = CashFlow.Load(
                 Guid.Empty,                
+                0,
                 entries);
 
             //
