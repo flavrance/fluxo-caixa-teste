@@ -15,11 +15,11 @@ RUN dotnet restore FluxoCaixa.sln
 
 # Copy everything else and build
 COPY . ./
-RUN dotnet publish -c Release -o out src/FluxoCaixa.API/FluxoCaixa.API.csproj
+RUN dotnet publish -c Release -o out src/FluxoCaixa.Worker/FluxoCaixa.Worker.csproj
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build-env /app/out .
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
-ENTRYPOINT ["dotnet", "FluxoCaixa.API.dll"]
+ENTRYPOINT ["dotnet", "FluxoCaixa.Worker.dll"] 

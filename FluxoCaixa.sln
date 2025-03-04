@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{80BE325F-5B95-46DC-89DA-DFBE1B62D84C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluxoCaixa.Domain.Core", "src\FluxoCaixa.Domain.Core\FluxoCaixa.Domain.Core.csproj", "{DB422A14-8B15-43F0-A708-23257F12387F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluxoCaixa.Application.Core", "src\FluxoCaixa.Application.Core\FluxoCaixa.Application.Core.csproj", "{48D16922-23F5-4A98-91CE-0A063E40C73E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluxoCaixa.Infrastructure.Data", "src\FluxoCaixa.Infrastructure.Data\FluxoCaixa.Infrastructure.Data.csproj", "{F770E79B-8E57-4A4F-B9A2-9E08E362A36F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluxoCaixa.Infrastructure.IoC", "src\FluxoCaixa.Infrastructure.IoC\FluxoCaixa.Infrastructure.IoC.csproj", "{27DB1CCE-F45D-4F60-9AB4-6C4218BBAE48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluxoCaixa.API", "src\FluxoCaixa.API\FluxoCaixa.API.csproj", "{8D779ABE-9766-466F-9712-E71B776B868B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluxoCaixa.Worker", "src\FluxoCaixa.Worker\FluxoCaixa.Worker.csproj", "{DA7E1C5C-A878-4527-ABA7-48A4B2F22255}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DB422A14-8B15-43F0-A708-23257F12387F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB422A14-8B15-43F0-A708-23257F12387F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB422A14-8B15-43F0-A708-23257F12387F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB422A14-8B15-43F0-A708-23257F12387F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48D16922-23F5-4A98-91CE-0A063E40C73E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48D16922-23F5-4A98-91CE-0A063E40C73E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48D16922-23F5-4A98-91CE-0A063E40C73E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48D16922-23F5-4A98-91CE-0A063E40C73E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F770E79B-8E57-4A4F-B9A2-9E08E362A36F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F770E79B-8E57-4A4F-B9A2-9E08E362A36F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F770E79B-8E57-4A4F-B9A2-9E08E362A36F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F770E79B-8E57-4A4F-B9A2-9E08E362A36F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27DB1CCE-F45D-4F60-9AB4-6C4218BBAE48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27DB1CCE-F45D-4F60-9AB4-6C4218BBAE48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27DB1CCE-F45D-4F60-9AB4-6C4218BBAE48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27DB1CCE-F45D-4F60-9AB4-6C4218BBAE48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D779ABE-9766-466F-9712-E71B776B868B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D779ABE-9766-466F-9712-E71B776B868B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D779ABE-9766-466F-9712-E71B776B868B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D779ABE-9766-466F-9712-E71B776B868B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA7E1C5C-A878-4527-ABA7-48A4B2F22255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA7E1C5C-A878-4527-ABA7-48A4B2F22255}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA7E1C5C-A878-4527-ABA7-48A4B2F22255}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA7E1C5C-A878-4527-ABA7-48A4B2F22255}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DB422A14-8B15-43F0-A708-23257F12387F} = {80BE325F-5B95-46DC-89DA-DFBE1B62D84C}
+		{48D16922-23F5-4A98-91CE-0A063E40C73E} = {80BE325F-5B95-46DC-89DA-DFBE1B62D84C}
+		{F770E79B-8E57-4A4F-B9A2-9E08E362A36F} = {80BE325F-5B95-46DC-89DA-DFBE1B62D84C}
+		{27DB1CCE-F45D-4F60-9AB4-6C4218BBAE48} = {80BE325F-5B95-46DC-89DA-DFBE1B62D84C}
+		{8D779ABE-9766-466F-9712-E71B776B868B} = {80BE325F-5B95-46DC-89DA-DFBE1B62D84C}
+		{DA7E1C5C-A878-4527-ABA7-48A4B2F22255} = {80BE325F-5B95-46DC-89DA-DFBE1B62D84C}
+	EndGlobalSection
+EndGlobal

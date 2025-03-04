@@ -1,0 +1,165 @@
+﻿version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5222:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=FluxoCaixa;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;
+      - ConnectionStrings__PostgresConnection=Host=postgres;Database=FluxoCaixa;Username=postgres;Password=postgres
+      - ConnectionStrings__MongoConnection=mongodb://mongodb:27017/FluxoCaixa
+      - ConnectionStrings__RedisConnection=redis:6379
+      - ConnectionStrings__RabbitMQConnection=rabbitmq
+      - DatabaseSettings__Provider=SqlServer
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - fluxocaixa-network
+    healthcheck:
+      test: ["CMD", "dotnet", "--list-runtimes"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.Worker
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=FluxoCaixa;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;
+      - ConnectionStrings__PostgresConnection=Host=postgres;Database=FluxoCaixa;Username=postgres;Password=postgres
+      - ConnectionStrings__MongoConnection=mongodb://mongodb:27017/FluxoCaixa
+      - ConnectionStrings__RedisConnection=redis:6379
+      - ConnectionStrings__RabbitMQConnection=rabbitmq
+      - DatabaseSettings__Provider=SqlServer
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    networks:
+      - fluxocaixa-network
+    restart: on-failure
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong@Passw0rd
+      - DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - fluxocaixa-network
+    healthcheck:
+      test: ["CMD-SHELL", "ps aux | grep sqlservr | grep -v grep || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  postgres:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=FluxoCaixa
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - fluxocaixa-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  mongodb:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - fluxocaixa-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - fluxocaixa-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - fluxocaixa-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+networks:
+  fluxocaixa-network:
+    driver: bridge
+
+volumes:
+  sqlserver-data:
+  postgres-data:
+  mongodb-data:
+  redis-data:
+  rabbitmq-data: 

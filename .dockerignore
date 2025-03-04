@@ -1,0 +1,55 @@
+# Git
+.git
+.gitignore
+.github
+
+# Docker
+.docker
+docker-compose.yml
+docker-compose.*.yml
+
+# Visual Studio
+.vs
+.vscode
+**/bin/
+**/obj/
+**/out/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# Test Results
+TestResults/
+[Cc]overage/
+*.coverage
+*.coveragexml
+
+# Logs
+logs/
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local 
