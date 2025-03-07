@@ -2,6 +2,41 @@
 
 API para gerenciamento de fluxo de caixa, permitindo o registro de créditos e débitos, além da geração de relatórios diários e por período.
 
+## Tecnologias Utilizadas
+
+O projeto foi construído utilizando .NET na versão 8.0, escolhido pela sua performance, suporte a longo prazo e recursos modernos. Utilizei SQL Server como banco de dados principal devido à sua robustez, confiabilidade e integração nativa com o Entity Framework Core. Para o gerenciamento da fila de processamento de relatórios, foi implementado o RabbitMQ, que oferece alta disponibilidade, escalabilidade e garantia de entrega de mensagens.
+
+- **Backend**:
+  - .NET 8.0
+  - ASP.NET Core Web API
+  - Entity Framework Core 8.0
+  - MediatR (Mediator pattern)
+  - FluentValidation
+  - Serilog (Logging)
+
+- **Banco de Dados**:
+  - SQL Server (relacional para dados principais)
+  - MongoDB (NoSQL para logs e dados não estruturados)
+  - Redis (Cache para otimização de performance)
+
+- **Mensageria**:
+  - RabbitMQ (para processamento assíncrono de relatórios)
+
+- **Resiliência**:
+  - Polly (Circuit Breaker)
+
+- **Testes**:
+  - xUnit
+  - Moq
+  - Bogus
+
+- **Documentação**:
+  - Swagger / OpenAPI
+
+- **Containerização**:
+  - Docker
+  - Docker Compose
+
 ## Arquitetura
 
 Este projeto foi desenvolvido seguindo os princípios da **Clean Architecture** combinada com o padrão **Ports and Adapters (Hexagonal Architecture)**. Esta abordagem garante:
@@ -12,52 +47,11 @@ Este projeto foi desenvolvido seguindo os princípios da **Clean Architecture** 
 
 ### Diagrama da Solução
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                                                                         │
-│  ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐   │
-│  │                 │     │                 │     │                 │   │
-│  │  FluxoCaixa.API │     │ FluxoCaixa.Worker│     │  Clients/UI    │   │
-│  │                 │     │                 │     │                 │   │
-│  └────────┬────────┘     └────────┬────────┘     └─────────────────┘   │
-│           │                       │                                     │
-│           ▼                       ▼                                     │
-│  ┌─────────────────────────────────────────────────────────┐           │
-│  │                                                         │           │
-│  │             FluxoCaixa.Infrastructure.IoC               │           │
-│  │                                                         │           │
-│  └─────────────────────────────────────────────────────────┘           │
-│           │                       │                                     │
-│           ▼                       ▼                                     │
-│  ┌─────────────────────────────────────────────────────────┐           │
-│  │                                                         │           │
-│  │             FluxoCaixa.Application.Core                 │           │
-│  │                                                         │           │
-│  └─────────────────────────────────────────────────────────┘           │
-│           │                       │                                     │
-│           ▼                       ▼                                     │
-│  ┌─────────────────────────────────────────────────────────┐           │
-│  │                                                         │           │
-│  │               FluxoCaixa.Domain.Core                    │           │
-│  │                                                         │           │
-│  └─────────────────────────────────────────────────────────┘           │
-│           │                       │                                     │
-│           ▼                       ▼                                     │
-│  ┌─────────────────────────────────────────────────────────┐           │
-│  │                                                         │           │
-│  │            FluxoCaixa.Infrastructure.Data               │           │
-│  │                                                         │           │
-│  └─────────────────────────────────────────────────────────┘           │
-│           │                       │                                     │
-│           ▼                       ▼                                     │
-│  ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐   │
-│  │                 │     │                 │     │                 │   │
-│  │   SQL Server    │     │    MongoDB      │     │     Redis       │   │
-│  │   PostgreSQL    │     │                 │     │                 │   │
-│  └─────────────────┘     └─────────────────┘     └─────────────────┘   │
-│                                                                         │
-└─────────────────────────────────────────────────────────────────────────┘
-```
+![Arquitetura Hexagonal](/docs/hexagonal_style-1.jpg)
+
+### Diagrama C4 Model
+
+![C4 Model](/docs/C4_FluxoCaixa.png)
 
 ### Fluxo de Processamento Assíncrono
 
@@ -123,70 +117,66 @@ Este projeto foi desenvolvido seguindo os princípios da **Clean Architecture** 
    - DailyConsolidationWorker: Processa o consolidado diário de forma assíncrona
    - Circuit Breaker: Implementação de resiliência com Polly
 
-## Tecnologias Utilizadas
+## Casos de Uso da Aplicação
 
-- **Backend**:
-  - .NET 8.0
-  - ASP.NET Core Web API
-  - Entity Framework Core 8.0
-  - MediatR (Mediator pattern)
-  - FluentValidation
-  - Serilog (Logging)
+### Controle de Lançamentos
 
-- **Banco de Dados**:
-  - SQL Server / PostgreSQL (relacional)
-  - MongoDB (NoSQL para logs)
-  - Redis (Cache)
+1. **Criação de Fluxo de Caixa**
+   - Permite criar um novo fluxo de caixa com nome e data
+   - Validações: Nome não pode ser vazio, data deve ser válida
 
-- **Mensageria**:
-  - RabbitMQ
+2. **Adição de Créditos**
+   - Permite adicionar um crédito a um fluxo de caixa existente
+   - Validações: Valor deve ser maior que zero, fluxo de caixa deve existir
 
-- **Resiliência**:
-  - Polly (Circuit Breaker)
+3. **Adição de Débitos**
+   - Permite adicionar um débito a um fluxo de caixa existente
+   - Validações: Valor deve ser maior que zero, fluxo de caixa deve existir
 
-- **Testes**:
-  - xUnit
-  - Moq
-  - Bogus
+4. **Consulta de Fluxo de Caixa**
+   - Permite consultar um fluxo de caixa por ID ou data
+   - Retorna detalhes do fluxo de caixa, incluindo créditos e débitos
 
-- **Documentação**:
-  - Swagger / OpenAPI
+### Serviço de Consolidado Diário
 
-- **Containerização**:
-  - Docker
-  - Docker Compose
+1. **Geração de Relatório Diário**
+   - Consolida automaticamente os lançamentos do dia
+   - Calcula saldo, total de créditos e débitos
+   - Armazena o relatório para consulta posterior
 
-## Funcionalidades
+2. **Consulta de Relatório**
+   - Permite consultar relatórios por data
+   - Fornece visão consolidada dos lançamentos
 
-### Fluxo de Caixa
-
-- Criação, atualização e exclusão de fluxos de caixa
-- Adição de créditos e débitos
-- Consulta de fluxos de caixa por ID e data
-
-### Relatórios
-
-- Relatórios diários de fluxo de caixa
-- Relatório consolidado por data
-- Relatório por período
-
-### Processamento Assíncrono
-
-- Worker Service para processamento do consolidado diário
-- Implementação de Circuit Breaker para resiliência
-- Reprocessamento automático em caso de falhas
-
-### Cache
-
-- Armazenamento em cache de relatórios e consolidados
-- Estratégia de fallback para cache em caso de indisponibilidade do banco
+3. **Processamento Assíncrono**
+   - Utiliza worker service para processamento em background
+   - Implementa circuit breaker para resiliência
+   - Garante que relatórios sejam gerados mesmo em caso de falhas temporárias
 
 ## Como Executar
 
 ### Requisitos
 
 - .NET 8.0 SDK
-- Docker e Docker Compose (opcional)
+- Docker e Docker Compose
+
+### Executando com Docker
+
+1. Clone o repositório:
+   ```
+   git clone https://github.com/seu-usuario/fluxo-caixa-api.git
+   cd fluxo-caixa-api
+   ```
+
+2. Execute o comando:
+   ```
+   docker-compose up -d
+   ```
+
+3. Acesse a API em:
+   ```
+   http://localhost:5222/swagger
+   ```
 
 ### Executando Localmente
 
@@ -217,17 +207,13 @@ Este projeto foi desenvolvido seguindo os princípios da **Clean Architecture** 
    dotnet run --project src/FluxoCaixa.Worker
    ```
 
-### Executando com Docker
+### Postman Collection
 
-1. Execute o comando:
-   ```
-   docker-compose up -d
-   ```
+Uma coleção do Postman está disponível para facilitar o teste da API:
 
-2. Acesse a API em:
-   ```
-   http://localhost:5222/swagger
-   ```
+1. Importe a coleção disponível em `/docs/FluxoCaixa.postman_collection.json`
+2. Configure as variáveis de ambiente no Postman:
+   - `base_url`: URL base da API (por padrão: `http://localhost:5222`)
 
 ## Testes
 
@@ -284,18 +270,6 @@ http://localhost:5222/swagger
      ├── Unit
      ├── Integration
 ```
-
-## Contribuição
-
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
-3. Faça commit das suas alterações (`git commit -m 'Adiciona nova feature'`)
-4. Faça push para a branch (`git push origin feature/nova-feature`)
-5. Abra um Pull Request
-
-## Licença
-
-Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ## Considerações Técnicas e Desafios
 
@@ -433,8 +407,34 @@ Verifique se o repositório está:
 - Otimizadas as consultas ao banco de dados
 - Implementada estratégia adequada para carregamento de entidades relacionadas
 
-### Próximos Passos
-- Implementar paginação nas consultas para melhorar o desempenho com grandes volumes de dados
-- Adicionar cache para consultas frequentes
-- Melhorar a documentação da API
-- Implementar testes de integração adicionais
+## Considerações Finais e Observações
+
+Para tornar o projeto ainda mais robusto, considere as seguintes melhorias:
+
+1. **Autenticação e Autorização**: Implementar JWT ou OAuth2 para proteger os endpoints da API, garantindo que apenas usuários autorizados possam acessar determinadas funcionalidades.
+
+2. **Monitoramento e Observabilidade**: Integrar com ELK Stack (Elasticsearch, Logstash, Kibana) e APM Server para monitoramento em tempo real, facilitando a identificação e resolução de problemas.
+
+3. **Arquitetura de Microsserviços**: Para sistemas maiores, considerar a migração para uma arquitetura de microsserviços, separando o controle de lançamentos e o serviço de consolidado diário em serviços independentes.
+
+4. **Event Sourcing**: Implementar o padrão Event Sourcing para manter um histórico completo de todas as alterações no sistema, facilitando auditorias e permitindo reconstruir o estado do sistema em qualquer ponto no tempo.
+
+5. **Testes de Carga**: Realizar testes de carga para garantir que o sistema possa lidar com volumes significativos de transações, especialmente em períodos de pico.
+
+6. **Backup e Recuperação**: Implementar estratégias robustas de backup e recuperação para garantir a integridade dos dados em caso de falhas.
+
+7. **Internacionalização**: Adicionar suporte para múltiplos idiomas e formatos de moeda para uso internacional.
+
+8. **Versionamento de API**: Implementar versionamento da API para permitir evoluções sem quebrar compatibilidade com clientes existentes.
+
+## Contribuição
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
+3. Faça commit das suas alterações (`git commit -m 'Adiciona nova feature'`)
+4. Faça push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
+
+## Licença
+
+Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE) para mais detalhes.

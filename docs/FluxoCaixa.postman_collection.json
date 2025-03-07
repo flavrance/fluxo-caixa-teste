@@ -1,0 +1,449 @@
+{
+	"info": {
+		"_postman_id": "f8a7b3e5-6d2c-4a5e-9c8d-1f2e3a4b5c6d",
+		"name": "Fluxo de Caixa API",
+		"description": "Coleção para testar a API de Fluxo de Caixa",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5222",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Fluxo de Caixa",
+			"item": [
+				{
+					"name": "Obter Todos os Fluxos de Caixa",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cashflow",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cashflow"
+							]
+						},
+						"description": "Retorna todos os fluxos de caixa cadastrados no sistema."
+					},
+					"response": []
+				},
+				{
+					"name": "Obter Fluxo de Caixa por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cashflow/{{cashflow_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cashflow",
+								"{{cashflow_id}}"
+							]
+						},
+						"description": "Retorna um fluxo de caixa específico pelo seu ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Obter Fluxos de Caixa por Data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cashflow/date/{{date}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cashflow",
+								"date",
+								"{{date}}"
+							]
+						},
+						"description": "Retorna todos os fluxos de caixa de uma data específica. Formato da data: YYYY-MM-DD."
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Fluxo de Caixa",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Fluxo de Caixa Mensal\",\n    \"date\": \"2023-03-01T00:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cashflow",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cashflow"
+							]
+						},
+						"description": "Cria um novo fluxo de caixa com nome e data."
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Fluxo de Caixa",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"{{cashflow_id}}\",\n    \"name\": \"Fluxo de Caixa Atualizado\",\n    \"date\": \"2023-03-01T00:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cashflow",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cashflow"
+							]
+						},
+						"description": "Atualiza um fluxo de caixa existente."
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir Fluxo de Caixa",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cashflow/{{cashflow_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cashflow",
+								"{{cashflow_id}}"
+							]
+						},
+						"description": "Exclui um fluxo de caixa pelo seu ID."
+					},
+					"response": []
+				}
+			],
+			"description": "Operações relacionadas ao gerenciamento de fluxos de caixa."
+		},
+		{
+			"name": "Créditos",
+			"item": [
+				{
+					"name": "Adicionar Crédito",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 1000.00,\n    \"description\": \"Venda de produtos\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cashflow/{{cashflow_id}}/credit",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cashflow",
+								"{{cashflow_id}}",
+								"credit"
+							]
+						},
+						"description": "Adiciona um crédito a um fluxo de caixa específico."
+					},
+					"response": []
+				},
+				{
+					"name": "Obter Créditos por Fluxo de Caixa",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cashflow/{{cashflow_id}}/credits",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cashflow",
+								"{{cashflow_id}}",
+								"credits"
+							]
+						},
+						"description": "Retorna todos os créditos de um fluxo de caixa específico."
+					},
+					"response": []
+				}
+			],
+			"description": "Operações relacionadas ao gerenciamento de créditos."
+		},
+		{
+			"name": "Débitos",
+			"item": [
+				{
+					"name": "Adicionar Débito",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 500.00,\n    \"description\": \"Pagamento de fornecedor\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cashflow/{{cashflow_id}}/debit",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cashflow",
+								"{{cashflow_id}}",
+								"debit"
+							]
+						},
+						"description": "Adiciona um débito a um fluxo de caixa específico."
+					},
+					"response": []
+				},
+				{
+					"name": "Obter Débitos por Fluxo de Caixa",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cashflow/{{cashflow_id}}/debits",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cashflow",
+								"{{cashflow_id}}",
+								"debits"
+							]
+						},
+						"description": "Retorna todos os débitos de um fluxo de caixa específico."
+					},
+					"response": []
+				}
+			],
+			"description": "Operações relacionadas ao gerenciamento de débitos."
+		},
+		{
+			"name": "Relatórios",
+			"item": [
+				{
+					"name": "Obter Relatório por Data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/report/date/{{date}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"report",
+								"date",
+								"{{date}}"
+							]
+						},
+						"description": "Retorna o relatório consolidado de uma data específica. Formato da data: YYYY-MM-DD."
+					},
+					"response": []
+				},
+				{
+					"name": "Obter Relatório por Período",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/report/period?startDate={{start_date}}&endDate={{end_date}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"report",
+								"period"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "{{start_date}}"
+								},
+								{
+									"key": "endDate",
+									"value": "{{end_date}}"
+								}
+							]
+						},
+						"description": "Retorna o relatório consolidado de um período específico. Formato das datas: YYYY-MM-DD."
+					},
+					"response": []
+				},
+				{
+					"name": "Gerar Relatório Diário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/report/generate/{{date}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"report",
+								"generate",
+								"{{date}}"
+							]
+						},
+						"description": "Gera manualmente o relatório consolidado para uma data específica. Formato da data: YYYY-MM-DD."
+					},
+					"response": []
+				}
+			],
+			"description": "Operações relacionadas à geração e consulta de relatórios."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+} 

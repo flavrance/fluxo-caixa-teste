@@ -1,0 +1,42 @@
+@startuml C4_FluxoCaixa
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Diagrama C4 Model - Sistema de Fluxo de Caixa
+
+Person(usuario, "Usuário", "Usuário do sistema de fluxo de caixa")
+
+System_Boundary(sistema_fluxo_caixa, "Sistema de Fluxo de Caixa") {
+    Container(api, "API", "ASP.NET Core Web API", "Fornece funcionalidades de fluxo de caixa via REST API")
+    Container(worker, "Worker Service", ".NET Worker Service", "Processa relatórios de forma assíncrona")
+    Container(aplicacao, "Camada de Aplicação", ".NET Core", "Implementa a lógica de negócio e casos de uso")
+    Container(dominio, "Camada de Domínio", ".NET Core", "Contém entidades e regras de negócio")
+    Container(infraestrutura, "Camada de Infraestrutura", ".NET Core", "Implementa acesso a dados e serviços externos")
+    
+    ContainerDb(sqlserver, "SQL Server", "SQL Server", "Armazena dados de fluxo de caixa, créditos, débitos e relatórios")
+    ContainerDb(mongodb, "MongoDB", "MongoDB", "Armazena logs e dados não estruturados")
+    ContainerDb(redis, "Redis", "Redis", "Cache para otimização de performance")
+    
+    Container(rabbitmq, "RabbitMQ", "Message Broker", "Gerencia filas de processamento assíncrono")
+}
+
+System_Ext(sistema_externo, "Sistema Externo", "Sistema que pode integrar com a API de Fluxo de Caixa")
+
+Rel(usuario, api, "Usa", "HTTPS")
+Rel(sistema_externo, api, "Integra com", "HTTPS")
+
+Rel(api, aplicacao, "Usa")
+Rel(worker, aplicacao, "Usa")
+Rel(aplicacao, dominio, "Usa")
+Rel(aplicacao, infraestrutura, "Usa")
+Rel(infraestrutura, dominio, "Usa")
+
+Rel(infraestrutura, sqlserver, "Lê/Escreve", "Entity Framework Core")
+Rel(infraestrutura, mongodb, "Lê/Escreve", "MongoDB Driver")
+Rel(infraestrutura, redis, "Lê/Escreve", "StackExchange.Redis")
+
+Rel(api, rabbitmq, "Publica mensagens")
+Rel(worker, rabbitmq, "Consome mensagens")
+
+@enduml 
